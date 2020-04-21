@@ -9,6 +9,7 @@
  * out: [2020-04-21T12:37:53.252Z] [INFO] [Received message]: inform
  */
 const { createLogger, transports, format } = require('winston');
+const { ENV } = require('../config');
 
 const mFormat = format.printf(({ level, message, timestamp, label }) => {
   if (!label)
@@ -24,7 +25,7 @@ const log = createLogger({
   format: format.combine(format.timestamp(), mFormat),
 });
 
-if (process.env.NODE_ENV !== 'PRODUCTION') {
+if (ENV !== 'PRODUCTION') {
   log.add(new transports.Console());
 }
 
