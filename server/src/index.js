@@ -2,6 +2,7 @@ const express = require('express');
 const useRouter = require('./routes');
 const { PORT } = require('./config');
 const { log } = require('./helpers');
+const connectToMongo = require('./db');
 
 const app = express();
 
@@ -13,7 +14,7 @@ useRouter(app);
 
 // Final stage
 const start = async () => {
-  // await connectToMongo()
+  await connectToMongo();
   app.listen(PORT, log.info({ label: 'Listening port', message: `${PORT}` }));
 };
 
