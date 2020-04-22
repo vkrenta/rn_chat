@@ -10,7 +10,7 @@ module.exports = async () => {
     });
     log.info('Successful connection to MongoDB');
   } catch (e) {
-    log.error({ label: 'MONGO', message: e });
+    log.error({ label: e.name, message: e.message });
     process.exit(-1);
   }
 };
