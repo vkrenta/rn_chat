@@ -2,6 +2,7 @@ require('dotenv').config({ path: 'src/config/.env' });
 
 module.exports = 
 {
+		ENV: process.env.NODE_ENV,
     PORT: process.env.PORT,
 		MONGO_URI: process.env.MONGO_URI
 			.replace(
