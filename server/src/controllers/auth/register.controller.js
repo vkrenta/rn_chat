@@ -1,8 +1,16 @@
-const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const fs = require('fs');
+const
+{
+	VERIFY_ROUTE,
+	SALT_ROUNDS
+} = require('../../config');
 
-const { resType, sendMail } = require('../../helpers');
+
+const { resType, sendMail, verify } = require('../../helpers');
+
 const {
-  auth: { isUserExists },
+  auth: { userExists },
 } = require('../../db/methods');
 
 module.exports = async (req, res, next) => {
@@ -12,41 +20,51 @@ module.exports = async (req, res, next) => {
     if (!(userName && password && email))
       res.status(400).send({ message: 'Empty required fields' });
 
-    const userExists = await isUserExists({ userName, email });
-
-    // 1) check is user already exists
-    if (userExists)
+    // 1) check if user already exists
+    if (await userExists({ userName, email }))
       return res
         .status(201)
         .send({ type: resType.info, message: 'User already exists' });
 
-    // 2) create link
-    const token = jwt.sign(
-      {
-        userName,
-        password, // bcrypt needed
-        email,
-        firstName,
-        lastName,
-      },
-      process.env.LINK_SECRET,
-      { expiresIn: '15m' }
-    );
 
-    const link = `${process.env.LINK_ROUTE}/${token}`;
+		let token;
 
-    // 3) send email, need static html
-    await sendMail({
-      to: email,
-      subject: 'Verify your email',
-      html: `<h3>Hi, ${userName} </h3>
-      </br>
-      <div>Click <a href="${link}">here</a> to end registration</div>
-      </br>
-      <div>Link expires in 15 min</div>
-      `,
-    });
+		bcrypt.genSalt(SALT_ROUNDS, (err, salt) =>
+		{
+			bcrypt.hash(password, salt, (e, hash) => 
+			{
+				token = verify.sign(
+					{
+							userName,
+							hash, // Hashed password
+							email,
+							firstName,
+							lastName,
+					},
+					{
+						expiresIn: '15m'
+					});
+			});
+		});
 
+    const link = `${VERIFY_ROUTE}/${token}`;
+		let htmlTemplate;
+
+		fs.readFileSync('../views/regconfirm.html', (err, data) =>
+		{
+			if (err) next(err);
+
+
+			htmlTemplate = data;
+			htmlTemplate = htmlTemplate.replace('{{userName}}', userName);
+			htmlTemplate = htmlTemplate.replace('{{link}}', link);
+		});
+		
+		await sendMail({
+		to: email,
+		subject: 'Verify your email',
+			html: htmlTemplate	
+		});
     res.status(200).send({
       type: resType.info,
       message: `Verification letter sended to ${email}`,
