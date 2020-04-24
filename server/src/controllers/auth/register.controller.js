@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-const { LINK_SECRET, LINK_ROUTE } = require('../../config');
 const { resType, sendMail } = require('../../helpers');
 const {
   auth: { isUserExists },
@@ -30,11 +29,11 @@ module.exports = async (req, res, next) => {
         firstName,
         lastName,
       },
-      LINK_SECRET,
+      process.env.LINK_SECRET,
       { expiresIn: '15m' }
     );
 
-    const link = `${LINK_ROUTE}/${token}`;
+    const link = `${process.env.LINK_ROUTE}/${token}`;
 
     // 3) send email, need static html
     await sendMail({

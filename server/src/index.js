@@ -1,6 +1,6 @@
 const express = require('express');
 const useRouter = require('./routes');
-const { PORT } = require('./config');
+require('./config');
 const { log } = require('./helpers');
 const connectToMongo = require('./db');
 
@@ -15,7 +15,10 @@ useRouter(app);
 // Final stage
 const start = async () => {
   await connectToMongo();
-  app.listen(PORT, log.info({ label: 'Listening port', message: `${PORT}` }));
+  app.listen(
+    process.env.PORT,
+    log.info({ label: 'Listening port', message: `${process.env.PORT}` })
+  );
 };
 
 start();

@@ -3,14 +3,13 @@ const {
   auth: { createUser, isUserExists },
 } = require('../../db/methods');
 const { resType } = require('../../helpers');
-const { LINK_SECRET } = require('../../config');
 
 module.exports = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { userName, email, password, firstName, lastName } = jwt.verify(
       id,
-      LINK_SECRET
+      process.env.LINK_SECRET
     );
     const isExist = await isUserExists({ userName });
     if (isExist)
