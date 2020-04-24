@@ -6,7 +6,9 @@ const
 	SALT_ROUNDS
 } = require('../../config');
 
+
 const { resType, sendMail, verify } = require('../../helpers');
+
 const {
   auth: { userExists },
 } = require('../../db/methods');
@@ -23,6 +25,7 @@ module.exports = async (req, res, next) => {
       return res
         .status(201)
         .send({ type: resType.info, message: 'User already exists' });
+
 
 		let token;
 
@@ -50,6 +53,7 @@ module.exports = async (req, res, next) => {
 		fs.readFileSync('../views/regconfirm.html', (err, data) =>
 		{
 			if (err) next(err);
+
 
 			htmlTemplate = data;
 			htmlTemplate = htmlTemplate.replace('{{userName}}', userName);
