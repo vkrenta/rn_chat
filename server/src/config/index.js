@@ -1,16 +1,19 @@
 require('dotenv').config({ path: 'src/config/.env' });
 
-const linkRoute = process.env.LINK_ROUTE.replace('{{PORT}}', process.env.PORT);
-const dbName = process.env[`DB_NAME_${process.env.NODE_ENV}`];
-const mongoUri = process.env.MONGO_URI.replace('{{DB_NAME}}',	dbName);
+const procEnv = process.env;
+const { NODE_ENV } = procEnv;
+const verifyRoute = procEnv.LINK_ROUTE.replace('{{PORT}}', procEnv.PORT);
+const mongoUri = procEnv.MONGO_URI // Get DB URI depending on current NODE_ENV
+				.replace('{{DB_NAME}}',	procEnv[`DB_NAME_${ NODE_ENV }`]);
 
 module.exports = {
-  ENV: process.env.NODE_ENV,
-  PORT: process.env.PORT,
+  ENV: NODE_ENV,
+  PORT: procEnv.PORT,
   MONGO_URI: mongoUri,
-  LINK_SECRET: process.env.LINK_SECRET,
-  LINK_ROUTE: linkRoute,
-  MAIL_USER: process.env.MAIL_USER,
-  MAIL_SERVICE: process.env.MAIL_SERVICE,
-  MAIL_PASS: process.env.MAIL_PASS,
+  LINK_SECRET: procEnv.LINK_SECRET,
+  LINK_ROUTE: verifyRoute,
+	EXPIRED_ERR_CODE: procEnv.EXPIRED_ERR_CODE,
+  MAIL_USER: procEnv.MAIL_USER,
+  MAIL_SERVICE: procEnv.MAIL_SERVICE,
+	MAIL_PASS: procEnv.MAIL_PASS,
 };

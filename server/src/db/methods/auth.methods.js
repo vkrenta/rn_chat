@@ -18,7 +18,7 @@ const createUser = async ({
   log.info({ label: 'Created user', message: user });
 };
 
-const isUserExists = async ({ userName, email }) => {
+const userExists = async ({ userName, email }) => {
   let user;
   if (email) user = await User.findOne({ email }).exec();
   else if (userName) user = await User.findOne({ userName }).exec();
@@ -34,6 +34,6 @@ const findUser = async ({ userName, password, email }) => {
 
 module.exports = {
   createUser,
-  isUserExists,
+  userExists,
   findUser,
 };
