@@ -6,7 +6,7 @@ const schema = new Schema({
   password: { type: String, require: true },
   firstName: String,
   lastName: String,
-  dateRegistered: Date.now,
+  dateRegistered: { type: Date, default: Date.now },
 });
 
 module.exports = model('users', schema);
