@@ -14,15 +14,15 @@ module.exports = async (req, res, next) => {
     if (isExist)
       return res
         .status(200)
-        .send({ type: resType.info, message: `You cant activate twice` }); // and here html
+        .send({ type: resType.info, payload: `You cant activate twice` }); // and here html
     await createUser({ userName, email, password, firstName, lastName });
     res
-      .status(200)
-      .send({ type: resType.info, message: `Created user ${userName}` });
+      .status(201)
+      .send({ type: resType.info, payload: `Created user ${userName}` });
     // instead send html file
   } catch (e) {
     if (e.code === 2000)
-      res.status(201).send({ type: resType.info, message: `Link expired` });
+      res.status(200).send({ type: resType.info, payload: `Link expired` });
     // and here send html file
     next(e);
   }

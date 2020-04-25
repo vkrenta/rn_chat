@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const fs = require('fs').promises;
 
-const { resType, sendMail, sign } = require('../../helpers');
+const { resType, sendMail, sign, log } = require('../../helpers');
 
 const {
   auth: { userExists },
@@ -17,8 +17,8 @@ module.exports = async (req, res, next) => {
     // 1) check if user already exists
     if (await userExists({ userName, email }))
       return res
-        .status(201)
-        .send({ type: resType.info, message: 'User already exists' });
+        .status(200)
+        .send({ type: resType.info, payload: 'User already exists' });
 
     // 2) bcrypt password
     const cPassword = await bcrypt.hash(
@@ -40,6 +40,7 @@ module.exports = async (req, res, next) => {
     );
 
     const link = `${process.env.LINK_ROUTE}/${token}`;
+    log.info({ label: 'Created link', message: link });
 
     const htmlTemplate = (await fs.readFile('src/views/regconfirm.html'))
       .toString()
@@ -53,7 +54,7 @@ module.exports = async (req, res, next) => {
     });
     res.status(200).send({
       type: resType.info,
-      message: `Verification letter sended to ${email}`,
+      payload: `Verification letter sended to ${email}`,
     });
   } catch (e) {
     next(e);
