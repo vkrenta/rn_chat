@@ -1,13 +1,7 @@
 const bcrypt = require('bcrypt');
-const fs = require('fs');
-const
-{
-	VERIFY_ROUTE,
-	SALT_ROUNDS
-} = require('../../config');
+const fs = require('fs').promises;
 
-
-const { resType, sendMail, verify } = require('../../helpers');
+const { resType, sendMail, sign } = require('../../helpers');
 
 const {
   auth: { userExists },
@@ -26,45 +20,37 @@ module.exports = async (req, res, next) => {
         .status(201)
         .send({ type: resType.info, message: 'User already exists' });
 
+    // 2) bcrypt password
+    const cPassword = await bcrypt.hash(
+      password,
+      Number(process.env.SALT_ROUNDS)
+    );
 
-		let token;
+    // 3) get link
+    const token = sign(
+      {
+        userName,
+        password: cPassword,
+        email,
+        firstName,
+        lastName,
+      },
+      process.env.LINK_SECRET,
+      '15m'
+    );
 
-		bcrypt.genSalt(SALT_ROUNDS, (err, salt) =>
-		{
-			bcrypt.hash(password, salt, (e, hash) => 
-			{
-				token = verify.sign(
-					{
-							userName,
-							hash, // Hashed password
-							email,
-							firstName,
-							lastName,
-					},
-					{
-						expiresIn: '15m'
-					});
-			});
-		});
+    const link = `${process.env.LINK_ROUTE}/${token}`;
 
-    const link = `${VERIFY_ROUTE}/${token}`;
-		let htmlTemplate;
+    const htmlTemplate = (await fs.readFile('src/views/regconfirm.html'))
+      .toString()
+      .replace('{{userName}}', userName)
+      .replace('{{link}}', link);
 
-		fs.readFileSync('../views/regconfirm.html', (err, data) =>
-		{
-			if (err) next(err);
-
-
-			htmlTemplate = data;
-			htmlTemplate = htmlTemplate.replace('{{userName}}', userName);
-			htmlTemplate = htmlTemplate.replace('{{link}}', link);
-		});
-		
-		await sendMail({
-		to: email,
-		subject: 'Verify your email',
-			html: htmlTemplate	
-		});
+    await sendMail({
+      to: email,
+      subject: 'Verify your email',
+      html: htmlTemplate,
+    });
     res.status(200).send({
       type: resType.info,
       message: `Verification letter sended to ${email}`,
