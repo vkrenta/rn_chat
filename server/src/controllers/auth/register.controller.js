@@ -7,6 +7,8 @@ const {
   auth: { userExists },
 } = require('../../db/methods');
 
+const expireTime = '15m';
+
 module.exports = async (req, res, next) => {
   try {
     const { userName, password, email, firstName, lastName } = req.body;
@@ -36,7 +38,7 @@ module.exports = async (req, res, next) => {
         lastName,
       },
       process.env.LINK_SECRET,
-      '15m'
+      expireTime
     );
 
     const link = `${process.env.LINK_ROUTE}/${token}`;
@@ -44,7 +46,8 @@ module.exports = async (req, res, next) => {
     const htmlTemplate = (await fs.readFile('src/views/regconfirm.html'))
       .toString()
       .replace('{{userName}}', userName)
-      .replace('{{link}}', link);
+      .replace('{{link}}', link)
+      .replace('{{exp}}', expireTime);
 
     await sendMail({
       to: email,
