@@ -6,6 +6,5 @@ module.exports = {
   rules: {
     'no-var': 'warn',
     eqeqeq: ['warn', 'smart'],
-    'no-console': 'warn',
   },
 };

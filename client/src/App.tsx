@@ -2,21 +2,21 @@
  * Sample React Native App
  * https://github.com/facebook/react-native
  *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
  * @format
+ * @flow strict-local
  */
 
 import React from 'react';
-import {SafeAreaView, Text, StatusBar} from 'react-native';
+import {SafeAreaView, View, Text, StatusBar} from 'react-native';
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <>
-      <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        <Text>Hi</Text>
+        <StatusBar barStyle="dark-content" />
+        <View>
+          <Text>Hi</Text>
+        </View>
       </SafeAreaView>
     </>
   );
