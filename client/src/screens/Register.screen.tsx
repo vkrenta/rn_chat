@@ -5,12 +5,12 @@ const RegisterScreen: FC = () => {
   return (
     <>
       <ScrollView>
-        <TextInput placeholder="First Name" style={{borderWidth: 2}} />
-        <TextInput placeholder="Last Name" style={{borderWidth: 2}} />
-        <TextInput placeholder="UserName" style={{borderWidth: 2}} />
-        <TextInput placeholder="Email" style={{borderWidth: 2}} />
-        <TextInput placeholder="Password" style={{borderWidth: 2}} />
-        <TextInput placeholder="Confirm password" style={{borderWidth: 2}} />
+        <TextInput placeholder="First Name" />
+        <TextInput placeholder="Last Name" />
+        <TextInput placeholder="UserName" />
+        <TextInput placeholder="Email" />
+        <TextInput placeholder="Password" />
+        <TextInput placeholder="Confirm password" />
         <CheckBox />
         <Button
           title="Submit"
