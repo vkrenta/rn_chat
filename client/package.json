@@ -8,7 +8,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "link": "react-native link react-native-vector-icons"
+    "link": "react-native link react-native-vector-icons",
+    "link:rnicons": "react-native link"
   },
   "dependencies": {
     "@types/react-native-elements": "^0.18.0",
@@ -41,5 +42,10 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts/"
+    ]
   }
 }

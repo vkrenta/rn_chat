@@ -2,18 +2,32 @@ import React, {FC} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {Link} from 'react-router-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {
+  Container,
+  Header,
+  Content,
+  Body,
+  Title,
+  Left,
+  Right,
+} from 'native-base';
 
 const NavBar: FC = () => {
   return (
-    <View style={styles.content}>
-      <Icon name="rocket" size={30} color="#900" />
-      <Link to="/register">
-        <Text style={styles.text}>Register</Text>
-      </Link>
-      <Link to="/login">
-        <Text style={styles.text}>Login</Text>
-      </Link>
-    </View>
+    <Header>
+      <Left />
+      <Body>
+        <Title style={{fontFamily: 'Manrope-SemiBold'}}>Header</Title>
+
+        {/* <Link to="/register">
+          <Text style={styles.text}>Register</Text>
+        </Link>
+        <Link to="/login">
+          <Text style={styles.text}>Login</Text>
+        </Link> */}
+      </Body>
+      <Right />
+    </Header>
   );
 };
 
