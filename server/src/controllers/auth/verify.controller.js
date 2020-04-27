@@ -1,29 +1,34 @@
 const {
   auth: { createUser, userExists },
 } = require('../../db/methods');
-const { resType, verify } = require('../../helpers');
+const { verify } = require('../../helpers');
+const fs = require('fs').promises;
 
 module.exports = async (req, res, next) => {
-  try {
+  const htmlTemplate = (await fs.readFile('src/views/regresult.html')).toString();
+    try {
     const { id } = req.params;
     const { userName, email, password, firstName, lastName } = verify(
       id,
       process.env.LINK_SECRET
     );
     const isExist = await userExists({ userName });
-    if (isExist)
-      return res
-        .status(200)
-        .send({ type: resType.info, payload: `You cant activate twice` }); // and here html
+
+    let htmlResult;
+
+    if (isExist) {
+      htmlResult = htmlTemplate.replace('{{value}}', `You can't activate twice`);
+      return res.status(200).send(htmlResult); 
+    }
     await createUser({ userName, email, password, firstName, lastName });
-    res
-      .status(201)
-      .send({ type: resType.info, payload: `Created user ${userName}` });
-    // instead send html file
+
+    htmlResult = htmlTemplate.replace('{{value}}', `Congratulations, ${userName}! Your account has been successfully created.`);
+    res.status(200).send(htmlResult);
   } catch (e) {
-    if (e.code === 2000)
-      res.status(200).send({ type: resType.info, payload: `Link expired` });
-    // and here send html file
+    if (e.code === 2000) {
+      const htmlResult = htmlTemplate.replace('{{value}}', `Link expired. Please try again`);
+      res.status(201).send(htmlResult);
+    }
     next(e);
   }
 };
