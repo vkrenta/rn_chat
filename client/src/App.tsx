@@ -7,29 +7,29 @@
  */
 
 import React from 'react';
-import {SafeAreaView, View, Text, StatusBar} from 'react-native';
-import {NativeRouter, Switch, Route, Link} from 'react-router-native';
+import {SafeAreaView, StatusBar} from 'react-native';
+import {NativeRouter, Switch, Route, Redirect} from 'react-router-native';
 import RegisterScreen from './screens/Register.screen';
 import LoginScreen from './screens/Login.screen';
+import {ThemeProvider} from 'react-native-elements';
+import NavBar from './components/NavBar';
 
 const App: React.FC = () => {
   return (
     <>
       <NativeRouter>
-        <SafeAreaView style={{flex: 1, flexDirection: 'column'}}>
-          <StatusBar barStyle="dark-content" />
-          <View style={{flexDirection: 'row'}}>
-            <Link to="/register" style={{padding: 20, width: 100}}>
-              <Text>Register</Text>
-            </Link>
-            <Link to="/login" style={{padding: 20, width: 100}}>
-              <Text>Login</Text>
-            </Link>
-          </View>
-          <Switch>
-            <Route exact path="/register" component={RegisterScreen} />
-            <Route exact path="/login" component={LoginScreen} />
-          </Switch>
+        <SafeAreaView>
+          <ThemeProvider>
+            <StatusBar barStyle="dark-content" />
+            <NavBar />
+            <Switch>
+              <Route exact path="/register" component={RegisterScreen} />
+              <Route exact path="/login" component={LoginScreen} />
+              <Route exact path="/">
+                <Redirect to="register" />
+              </Route>
+            </Switch>
+          </ThemeProvider>
         </SafeAreaView>
       </NativeRouter>
     </>

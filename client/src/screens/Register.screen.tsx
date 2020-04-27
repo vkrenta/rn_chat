@@ -1,10 +1,15 @@
 import React, {FC} from 'react';
 import {TextInput, CheckBox, Button, ScrollView, Alert} from 'react-native';
+import {Input} from 'react-native-elements';
 
 const RegisterScreen: FC = () => {
   return (
     <>
       <ScrollView>
+        <Input
+          placeholder="INPUT WITH ICON"
+          leftIcon={{type: 'font-awesome', name: 'chevron-left'}}
+        />
         <TextInput placeholder="First Name" />
         <TextInput placeholder="Last Name" />
         <TextInput placeholder="UserName" />
