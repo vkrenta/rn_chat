@@ -1,25 +1,24 @@
 import React, {FC} from 'react';
-import {
-  TextInput,
-  CheckBox,
-  Button,
-  ScrollView,
-  Alert,
-  StyleSheet,
-} from 'react-native';
-import {Input} from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import {Form} from 'native-base';
+import RoundedInput from '../components/RoundedInput';
+import FormButton from '../components/FormButton';
 
 const RegisterScreen: FC = () => {
   return (
     <>
-      <ScrollView />
+      <Form>
+        <RoundedInput placeholder="First Name" />
+        <RoundedInput placeholder="Last Name" />
+        <RoundedInput placeholder="Username" />
+        <RoundedInput placeholder="Email" />
+        <RoundedInput placeholder="Password" secure />
+        <RoundedInput placeholder="Confirm password" secure />
+
+        <FormButton>Sing up</FormButton>
+        <FormButton>Sing up via FB</FormButton>
+      </Form>
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  input: {borderRadius: 50, borderColor: 'black'},
-});
 
 export default RegisterScreen;

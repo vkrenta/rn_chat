@@ -1,23 +1,13 @@
 import React, {FC} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {Link} from 'react-router-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import {
-  Container,
-  Header,
-  Content,
-  Body,
-  Title,
-  Left,
-  Right,
-} from 'native-base';
+import {StyleSheet} from 'react-native';
+import {Header, Body, Title, Left, Right} from 'native-base';
 
 const NavBar: FC = () => {
   return (
     <Header>
       <Left />
       <Body>
-        <Title style={{fontFamily: 'Manrope-SemiBold'}}>Header</Title>
+        <Title style={styles.title}>Header</Title>
 
         {/* <Link to="/register">
           <Text style={styles.text}>Register</Text>
@@ -32,14 +22,7 @@ const NavBar: FC = () => {
 };
 
 const styles = StyleSheet.create({
-  text: {
-    padding: 10,
-  },
-  content: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    backgroundColor: '#d7e',
-  },
+  title: {fontFamily: 'Manrope-SemiBold'},
 });
 
 export default NavBar;
