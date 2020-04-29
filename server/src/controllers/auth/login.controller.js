@@ -16,7 +16,7 @@ module.exports = async (req, res, next) => {
     if (!user)
       res.status(401).send({type: 'info', payload: "Wrong username or email"});
     
-    if (!bcrypt.compare(password, user.password))
+    if (!await bcrypt.compare(password, user.password))
       res.status(401).send({ type: 'info', payload: "Wrong password" });
     
     // Making sign function look more compact
