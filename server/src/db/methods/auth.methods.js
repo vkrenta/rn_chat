@@ -25,10 +25,10 @@ const userExists = async ({ userName, email }) => {
   return !!user;
 };
 
-const findUser = async ({ userName, password, email }) => {
+const findUser = async ({ userName, email }) => {
   let user;
-  if (email) user = await User.findOne({ email, password }).exec();
-  else if (userName) user = await User.findOne({ userName, password }).exec();
+  if (email) user = await User.findOne({ email }).exec();
+  else if (userName) user = await User.findOne({ userName }).exec();
   return user;
 };
 
