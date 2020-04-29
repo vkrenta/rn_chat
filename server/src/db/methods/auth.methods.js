@@ -27,8 +27,9 @@ const userExists = async ({ userName, email }) => {
 
 const findUser = async ({ userName, email }) => {
   let user;
-  if (email) user = await User.findOne({ email }).exec();
-  else if (userName) user = await User.findOne({ userName }).exec();
+
+  if (userName) user = await User.findOne({ userName }).exec();
+  if (!user) user = await User.findOne({ email }).exec();
   return user;
 };
 

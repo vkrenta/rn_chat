@@ -14,7 +14,7 @@ module.exports = async (req, res, next) => {
     const { userName, password, email, firstName, lastName } = req.body;
 
     if (!(userName && password && email))
-      res.status(400).send({ message: 'Empty required fields' });
+      res.status(400).send({ message: 'Required fields are empty' });
 
     // 1) check if user already exists
     if (await userExists({ userName, email }))
