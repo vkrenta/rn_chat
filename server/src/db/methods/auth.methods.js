@@ -18,22 +18,21 @@ const createUser = async ({
   log.info({ label: 'Created user', message: user });
 };
 
-const userExists = async ({ userName, email }) => {
+const getUser = async ({ userName, email }) =>
+{
   let user;
-  if (email) user = await User.findOne({ email }).exec();
-  else if (userName) user = await User.findOne({ userName }).exec();
-  return !!user;
-};
 
-const findUser = async ({ userName, password, email }) => {
-  let user;
-  if (email) user = await User.findOne({ email, password }).exec();
-  else if (userName) user = await User.findOne({ userName, password }).exec();
+  if (userName) user = await User.findOne({ userName }).exec();
+  if (!user) user = await User.findOne({ email }).exec();
   return user;
+};
+const checkUser = async ({ userName, email }) =>
+{
+  return !!await getUser({ userName, email });
 };
 
 module.exports = {
   createUser,
-  userExists,
-  findUser,
+  getUser,
+  checkUser,
 };

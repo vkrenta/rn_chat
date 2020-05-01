@@ -4,7 +4,7 @@ const fs = require('fs').promises;
 const { resType, sendMail, sign, log } = require('../../helpers');
 
 const {
-  auth: { userExists },
+  auth: { checkUser },
 } = require('../../db/methods');
 
 const expireTime = '15m';
@@ -14,10 +14,12 @@ module.exports = async (req, res, next) => {
     const { userName, password, email, firstName, lastName } = req.body;
 
     if (!(userName && password && email))
-      res.status(400).send({ message: 'Empty required fields' });
+      return res
+        .status(400)
+        .send({ type: 'error', message: 'Required fields are empty' });
 
     // 1) check if user already exists
-    if (await userExists({ userName, email }))
+    if (await checkUser({ userName, email }))
       return res
         .status(200)
         .send({ type: resType.info, payload: 'User already exists' });
@@ -48,7 +50,7 @@ module.exports = async (req, res, next) => {
       .toString()
       .replace('{{userName}}', userName)
       .replace('{{link}}', link)
-      .replace('{{exp}}', expireTime);
+      .replace('{{exp}}', '15 minutes');
 
     await sendMail({
       to: email,
