@@ -3,7 +3,7 @@ import sendRequest from './send-request';
 
 const register = async (credentials: TCredentials) =>
   sendRequest(
-    'http://localhost:8000/api/auth/register',
+    'api/auth/register',
     'POST',
     { 'Content-type': 'application/json' },
     JSON.stringify(credentials),

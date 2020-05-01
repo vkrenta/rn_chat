@@ -11,7 +11,6 @@ function* worker(action: TAction<TCredentials>) {
       register,
       action.payload!,
     );
-    console.log(payload);
     yield put(showToast(payload));
   } catch (e) {
     console.log(e);
