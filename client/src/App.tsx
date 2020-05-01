@@ -7,38 +7,55 @@
  */
 
 import React from 'react';
-import {SafeAreaView, StatusBar} from 'react-native';
-import {NativeRouter, Switch, Route, Redirect} from 'react-router-native';
+import {
+  SafeAreaView,
+  StatusBar,
+  View,
+  StyleSheet,
+  ImageBackground,
+  Dimensions,
+} from 'react-native';
+import { NativeRouter, Switch, Route, Redirect } from 'react-router-native';
 import RegisterScreen from './screens/Register.screen';
 import LoginScreen from './screens/Login.screen';
 import NavBar from './components/NavBar';
-import {Container, Content, Footer, Form, Item, Input} from 'native-base';
-import Bottom from './components/Bottom';
 
 const App: React.FC = () => {
   return (
     <>
       <NativeRouter>
-        <Container>
-          <StatusBar barStyle="dark-content" />
+        <View>
+          <StatusBar barStyle='dark-content' />
+          <ImageBackground
+            source={require('./static/images/leaves.jpg')}
+            style={$.image}
+          >
+            <NavBar />
 
-          <NavBar />
-
-          <Content>
-            <Switch>
-              <Route exact path="/register" component={RegisterScreen} />
-              <Route exact path="/login" component={LoginScreen} />
-              <Route exact path="/">
-                <Redirect to="register" />
-              </Route>
-            </Switch>
-          </Content>
-
-          <Bottom />
-        </Container>
+            <View>
+              <Switch>
+                <Route exact path='/register' component={RegisterScreen} />
+                <Route exact path='/login' component={LoginScreen} />
+                <Route exact path='/'>
+                  <Redirect to='register' />
+                </Route>
+              </Switch>
+            </View>
+          </ImageBackground>
+        </View>
       </NativeRouter>
     </>
   );
 };
+
+const W_WIDTH = Dimensions.get('window').width;
+const W_HEIGHT = Dimensions.get('window').height;
+
+const $ = StyleSheet.create({
+  image: {
+    width: W_WIDTH,
+    height: W_HEIGHT,
+  },
+});
 
 export default App;

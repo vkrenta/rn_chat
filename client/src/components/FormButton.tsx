@@ -1,13 +1,39 @@
-import React from 'react';
-import {Button, Text} from 'native-base';
-import {TFormButton} from '../types';
+import React, { FC } from 'react';
+import { TFormButton } from '../types';
+import { View, StyleSheet, Dimensions } from 'react-native';
+import { Button } from 'react-native-elements';
 
-const FormButton = (props: TFormButton) => {
+const FormButton: FC<TFormButton> = React.forwardRef((props, ref) => {
   return (
-    <Button>
-      <Text>{props.children}</Text>
-    </Button>
+    <View>
+      <Button
+        ref={ref?.toString()}
+        onPress={props.onPress}
+        title={props.children?.toString()}
+        buttonStyle={$.buttonStyle}
+        titleStyle={$.titleStyle}
+      />
+    </View>
   );
-};
+})
+
+
+
+const W_WIDTH = Dimensions.get('window').width;
+
+const $ = StyleSheet.create({
+  buttonStyle: {
+    height: 50,
+    borderRadius: 15,
+    width: W_WIDTH * 0.6,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 5,
+    marginBottom: 5,
+  },
+  titleStyle: {
+    fontFamily: 'Manrope-Bold',
+  },
+});
 
 export default FormButton;
