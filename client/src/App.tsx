@@ -19,31 +19,40 @@ import { NativeRouter, Switch, Route, Redirect } from 'react-router-native';
 import RegisterScreen from './screens/Register.screen';
 import LoginScreen from './screens/Login.screen';
 import NavBar from './components/NavBar';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import rootReducer from './reducers';
+import createMiddleware from 'redux-saga';
+import watchers from './saga';
 
 const App: React.FC = () => {
+  const sagaMiddleware = createMiddleware();
+  const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
+  for (const w of watchers) sagaMiddleware.run(w);
   return (
     <>
-      <NativeRouter>
-        <View>
-          <StatusBar barStyle='dark-content' />
-          <ImageBackground
-            source={require('./static/images/leaves.jpg')}
-            style={$.image}
-          >
-            <NavBar />
+      <Provider store={store}>
+        <NativeRouter>
+          <View>
+            <StatusBar barStyle="dark-content" />
+            <ImageBackground
+              source={require('./static/images/leaves.jpg')}
+              style={$.image}>
+              <NavBar />
 
-            <View>
-              <Switch>
-                <Route exact path='/register' component={RegisterScreen} />
-                <Route exact path='/login' component={LoginScreen} />
-                <Route exact path='/'>
-                  <Redirect to='register' />
-                </Route>
-              </Switch>
-            </View>
-          </ImageBackground>
-        </View>
-      </NativeRouter>
+              <View>
+                <Switch>
+                  <Route exact path="/register" component={RegisterScreen} />
+                  <Route exact path="/login" component={LoginScreen} />
+                  <Route exact path="/">
+                    <Redirect to="register" />
+                  </Route>
+                </Switch>
+              </View>
+            </ImageBackground>
+          </View>
+        </NativeRouter>
+      </Provider>
     </>
   );
 };

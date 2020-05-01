@@ -3,11 +3,10 @@ import { TFormButton } from '../types';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { Button } from 'react-native-elements';
 
-const FormButton: FC<TFormButton> = React.forwardRef((props, ref) => {
+const FormButton: FC<TFormButton> = (props) => {
   return (
     <View>
       <Button
-        ref={ref?.toString()}
         onPress={props.onPress}
         title={props.children?.toString()}
         buttonStyle={$.buttonStyle}
@@ -15,9 +14,7 @@ const FormButton: FC<TFormButton> = React.forwardRef((props, ref) => {
       />
     </View>
   );
-})
-
-
+};
 
 const W_WIDTH = Dimensions.get('window').width;
 

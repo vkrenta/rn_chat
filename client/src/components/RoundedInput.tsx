@@ -1,23 +1,25 @@
-import React from 'react';
+import React, { Component, forwardRef, useState } from 'react';
 import { TRoundedInput } from 'src/types';
 import { StyleSheet, View, TextInputComponent } from 'react-native';
 import { Input } from 'react-native-elements';
 
-
-const RoundedInput = React.forwardRef<TextInputComponent, TRoundedInput>((props, ref) => {
+const RoundedInput = forwardRef<Input, TRoundedInput>((props, ref) => {
+  const [value, onChangeText] = useState<string>('');
   return (
     <View>
       <Input
-        ref={ref?.toString()}
+        ref={ref}
         inputStyle={$.input}
         inputContainerStyle={$.inputContainerStyle}
         placeholder={props.placeholder}
         containerStyle={$.containerStyle}
         placeholderTextColor='#fff'
+        value={value}
+        onChangeText={(text) => onChangeText(text)}
       />
     </View>
   );
-})
+});
 
 const $ = StyleSheet.create({
   input: {
