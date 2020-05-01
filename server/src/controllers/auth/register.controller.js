@@ -13,8 +13,10 @@ module.exports = async (req, res, next) => {
   try {
     const { userName, password, email, firstName, lastName } = req.body;
 
-    if (!(userName && password && email && firstName))
-      res.status(400).send({ message: 'Required fields are empty' });
+    if (!(userName && password && email))
+      return res
+        .status(400)
+        .send({ type: 'error', message: 'Required fields are empty' });
 
     // 1) check if user already exists
     if (await checkUser({ userName, email }))
@@ -48,7 +50,7 @@ module.exports = async (req, res, next) => {
       .toString()
       .replace('{{userName}}', userName)
       .replace('{{link}}', link)
-      .replace('{{exp}}', expireTime);
+      .replace('{{exp}}', '15 minutes');
 
     await sendMail({
       to: email,

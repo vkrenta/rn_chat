@@ -5,6 +5,13 @@ const { log } = require('./helpers');
 const connectToMongo = require('./db');
 const { logReq, logRes, errorMiddleware } = require('./middlewares');
 
+process.on('uncaughtException', (e) =>
+  log.error({ label: e.name, message: e.message })
+);
+process.on('unhandledRejection', (e) =>
+  log.error({ label: e.name, message: e.message })
+);
+
 const app = express();
 
 app.use(express.json({ extended: true }));
