@@ -1,4 +1,4 @@
-import { ENV, SERVER_LINK_DEV, SERVER_LINK_PROD } from 'react-native-dotenv';
+import { ENV, SERVER_LINK_DEV, SERVER_LINK_PROD } from '../../config';
 
 let SERVER_LINK: string = SERVER_LINK_DEV;
 if (ENV === 'PROD') SERVER_LINK = SERVER_LINK_PROD;

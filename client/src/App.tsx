@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
 import {
   SafeAreaView,
@@ -19,25 +11,28 @@ import { NativeRouter, Switch, Route, Redirect } from 'react-router-native';
 import RegisterScreen from './screens/Register.screen';
 import LoginScreen from './screens/Login.screen';
 import NavBar from './components/NavBar';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers';
 import createMiddleware from 'redux-saga';
 import watchers from './saga';
+import Toast from './components/Toast';
 
 const App: React.FC = () => {
   const sagaMiddleware = createMiddleware();
   const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
   for (const w of watchers) sagaMiddleware.run(w);
+
   return (
     <>
       <Provider store={store}>
         <NativeRouter>
-          <View>
-            <StatusBar barStyle="dark-content" />
+          <SafeAreaView>
             <ImageBackground
               source={require('./static/images/leaves.jpg')}
               style={$.image}>
+              <StatusBar translucent backgroundColor="transparent" />
+              <Toast />
               <NavBar />
 
               <View>
@@ -50,20 +45,17 @@ const App: React.FC = () => {
                 </Switch>
               </View>
             </ImageBackground>
-          </View>
+          </SafeAreaView>
         </NativeRouter>
       </Provider>
     </>
   );
 };
 
-const W_WIDTH = Dimensions.get('window').width;
-const W_HEIGHT = Dimensions.get('window').height;
-
 const $ = StyleSheet.create({
   image: {
-    width: W_WIDTH,
-    height: W_HEIGHT,
+    width: '100%',
+    height: '100%',
   },
 });
 

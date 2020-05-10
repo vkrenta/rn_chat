@@ -6,12 +6,13 @@ import { showToast } from '../actions';
 
 function* worker(action: TAction<TCredentials>) {
   try {
-    console.log(action.payload);
+    // console.log(action.payload);
+    yield put(showToast(JSON.stringify(action.payload)));
     const { payload }: { payload: string } = yield call(
       register,
       action.payload!,
     );
-    yield put(showToast(payload));
+    // yield put(showToast(payload));
   } catch (e) {
     console.log(e);
   }
