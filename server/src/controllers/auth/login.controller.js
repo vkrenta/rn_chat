@@ -22,7 +22,7 @@ module.exports = async (req, res, next) => {
     if (!user)
       throw {
         status: 401,
-        type: 'info',
+        type: 'warn',
         payload: 'Wrong username or email',
       };
 
@@ -30,15 +30,11 @@ module.exports = async (req, res, next) => {
     if (!(await bcrypt.compare(password, user.password)))
       throw {
         status: 401,
-        type: 'info',
+        type: 'warn',
         payload: 'Wrong password',
       };
 
-    const jwToken = jwt.sign(
-      { userId: user._id },
-      process.env.AUTH_SECRET,
-      '1d'
-    );
+    const jwToken = jwt.sign({ userId: user._id }, process.env.AUTH_SECRET);
     res.status(200).send({
       type: 'data',
       payload: { token: jwToken },

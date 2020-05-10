@@ -1,27 +1,18 @@
-import { ENV, SERVER_LINK_DEV, SERVER_LINK_PROD } from 'react-native-dotenv';
-
-let SERVER_LINK: string = SERVER_LINK_DEV;
-if (ENV === 'PROD') SERVER_LINK = SERVER_LINK_PROD;
-
-console.log(SERVER_LINK);
-
 const sendRequest = async (
   path: string,
   method: string,
   headers: any,
   body: string | null = null,
 ) => {
-  const response = await fetch(`${SERVER_LINK}/${path}`, {
+  const response = await fetch(`http://localhost:8000/${path}`, {
     method,
     headers,
     body,
   });
 
   const result = await response.json();
-
-  if (response.ok) return result;
-  if (response.status === 401 && result?.type === 'info') return result;
-  throw Error(response.status.toString());
+  if (result.type !== 'data') throw new Error(JSON.stringify(result));
+  return result;
 };
 
 export default sendRequest;

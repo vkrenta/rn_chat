@@ -22,3 +22,7 @@ export type TCredentials = {
   password: string;
   userName: string;
 };
+
+export type TGlobalState = {
+  toast: string;
+};

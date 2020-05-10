@@ -2,6 +2,8 @@
 #
 .DS_Store
 .env
+config.ts
+package-lock.json
 
 
 # Xcode

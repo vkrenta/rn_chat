@@ -1,12 +1,6 @@
 import { combineReducers, AnyAction } from 'redux';
+import toast from './toast.reducer';
 
-const emptyReducer = (state = '', action: any) => {
-  switch (action.type) {
-    default:
-      return '';
-  }
-};
-
-const rootReducer = combineReducers({ emptyReducer });
+const rootReducer = combineReducers({ toast });
 
 export default rootReducer;
