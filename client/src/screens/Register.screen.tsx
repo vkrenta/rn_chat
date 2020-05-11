@@ -7,6 +7,7 @@ import { TextInputComponent } from 'react-native';
 import { Input } from 'react-native-elements';
 import { useDispatch } from 'react-redux';
 import { signUp } from '../actions/index';
+import FBButton from '../components/FBButton';
 
 const RegisterScreen: FC = () => {
   const fNameInp = useRef<Input>(null);
@@ -47,6 +48,7 @@ const RegisterScreen: FC = () => {
         }}>
         Sing up
       </FormButton>
+      <FBButton />
       <FormButton>Sing up via FB</FormButton>
     </>
   );
