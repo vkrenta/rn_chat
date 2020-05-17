@@ -12,7 +12,8 @@ import RegisterScreen from './screens/Register.screen';
 import LoginScreen from './screens/Login.screen';
 import NavBar from './components/NavBar';
 import { Provider, useSelector } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware} from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './reducers';
 import createMiddleware from 'redux-saga';
 import watchers from './saga';
@@ -20,7 +21,9 @@ import Toast from './components/Toast';
 
 const App: React.FC = () => {
   const sagaMiddleware = createMiddleware();
-  const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));
+  const store = createStore(rootReducer, composeWithDevTools(
+    applyMiddleware(sagaMiddleware)
+  ));
   for (const w of watchers) sagaMiddleware.run(w);
 
   return (

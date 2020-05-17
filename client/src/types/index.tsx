@@ -1,4 +1,5 @@
 import { ReactNode, RefObject } from 'react';
+import { AccessTokenMap } from 'react-native-fbsdk';
 
 export type TRoundedInput = {
   placeholder?: string;
@@ -19,10 +20,19 @@ export type TCredentials = {
   firstName?: string;
   lastName?: string;
   email: string;
-  password: string;
-  userName: string;
+  password?: string;
+  userName?: string;
 };
 
 export type TGlobalState = {
   toast: string;
+  credentials: TCredentials;
+  fbAccessToken?: AccessTokenMap;
+};
+
+export type TFBGetRequest = {
+  version?: string,
+  path?: string,
+  fields: Array<string>,
+  accessToken: string
 };

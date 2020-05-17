@@ -1,7 +1,12 @@
 import { put } from 'redux-saga/effects';
-import { clearToast, showToast } from '../actions';
+import { showToast } from '../actions';
 
 export default function* errorHandler(e: Error) {
-  const result = JSON.parse(e.message);
-  yield put(showToast(e.message));
-}
+  let result;
+  try{
+    result = JSON.parse(e.message);
+  } catch (E) {
+    result = e.message || E.message;
+  }
+  yield put(showToast(result));
+};
