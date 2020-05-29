@@ -7,6 +7,7 @@ const FormButton: FC<TFormButton> = (props) => {
   return (
     <View>
       <Button
+        disabled={props.disabled}
         onPress={props.onPress}
         title={props.children?.toString()}
         buttonStyle={$.buttonStyle}
@@ -16,17 +17,16 @@ const FormButton: FC<TFormButton> = (props) => {
   );
 };
 
-const W_WIDTH = Dimensions.get('window').width;
-
 const $ = StyleSheet.create({
   buttonStyle: {
     height: 50,
     borderRadius: 15,
-    width: W_WIDTH * 0.6,
+    width: '60%',
     marginLeft: 'auto',
     marginRight: 'auto',
     marginTop: 5,
     marginBottom: 5,
+    backgroundColor: '#3A86FF',
   },
   titleStyle: {
     fontFamily: 'Manrope-Bold',

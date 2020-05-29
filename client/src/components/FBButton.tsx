@@ -1,25 +1,43 @@
 import React, { FC } from 'react';
-import { View } from 'react-native';
-import { LoginButton, AccessToken } from 'react-native-fbsdk';
+import { View, EventEmitter } from 'react-native';
+import { LoginButton, AccessToken, LoginManager } from 'react-native-fbsdk';
+import FormButton from './FormButton';
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../actions';
 
 const FBButton: FC = () => {
+  const dispatch = useDispatch();
   return (
-    <View>
-      <LoginButton
-        onLoginFinished={(error, result) => {
-          if (error) {
-            console.log('login has error: ' + result.error);
-          } else if (result.isCancelled) {
-            console.log('login is cancelled.');
-          } else {
-            AccessToken.getCurrentAccessToken().then((data) => {
-              console.log(data?.accessToken.toString());
-            });
-          }
-        }}
-        onLogoutFinished={() => console.log('logout.')}
-      />
-    </View>
+    <FormButton
+      onPress={async () => {
+        try {
+          const result = await LoginManager.logInWithPermissions([
+            'public_profile',
+            'email',
+          ]);
+          if (result.isCancelled) return console.log('login canceled');
+
+          const { accessToken } = Object(
+            await AccessToken.getCurrentAccessToken(),
+          );
+          const response = await fetch(
+            'https://graph.facebook.com/v5.0/me?fields=email,name&access_token=' +
+              accessToken,
+          );
+          const {
+            email,
+            name,
+          }: { email: string; name: string } = await response.json();
+
+          const [firstName, lastName] = name.split(' ');
+
+          dispatch(setCredentials({ email, firstName, lastName }));
+        } catch (error) {
+          console.log(error);
+        }
+      }}>
+      Sing up via FB
+    </FormButton>
   );
 };
 
