@@ -1,15 +1,15 @@
-import React, { FC, useRef, useState } from 'react';
-import { Form } from 'native-base';
-import RoundedInput from '../components/RoundedInput';
+import React, { FC, useState } from 'react';
 import FormButton from '../components/FormButton';
-import { TRoundedInput } from '../types';
-import { TextInputComponent, StyleSheet } from 'react-native';
+import { StyleSheet, View, Text, TouchableWithoutFeedback } from 'react-native';
 import { Input } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 import { signUp, setCredentials } from '../actions/index';
 import FBButton from '../components/FBButton';
 import { RootState } from '../reducers';
 import validator from 'validator';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+import { Toast } from 'native-base';
 
 const checkName = (name: string) =>
   /^([А-ЯІA-ZÀ-ÿ][-,а-яіa-z.']+[ ]*)+/gm.test(name) &&
@@ -17,6 +17,7 @@ const checkName = (name: string) =>
 
 const RegisterScreen: FC = () => {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
   const { firstName, lastName, email } = useSelector(
     (state: RootState) => state.rgCredentials!,
@@ -44,98 +45,100 @@ const RegisterScreen: FC = () => {
 
   return (
     <>
-      <Input
-        inputStyle={$.input}
-        inputContainerStyle={$.inputContainerStyle}
-        placeholder="First Name"
-        containerStyle={$.containerStyle}
-        placeholderTextColor="gray"
-        value={firstName}
-        errorMessage={firstNameError ? 'Incorrect characters' : ' '}
-        errorStyle={$.error}
-        onChangeText={(text) =>
-          dispatch(setCredentials({ firstName: text, lastName, email }))
-        }
-        onBlur={() => setFirstNameError(firstNameValidate)}
-      />
-      <Input
-        inputStyle={$.input}
-        inputContainerStyle={$.inputContainerStyle}
-        placeholder="Last Name"
-        containerStyle={$.containerStyle}
-        placeholderTextColor="gray"
-        value={lastName}
-        errorMessage={lastNameError ? 'Incorrect characters' : ' '}
-        errorStyle={$.error}
-        onChangeText={(text) =>
-          dispatch(setCredentials({ firstName, lastName: text, email }))
-        }
-        onBlur={() => setLastNameError(lastNameValidate)}
-      />
-      <Input
-        inputStyle={$.input}
-        inputContainerStyle={$.inputContainerStyle}
-        placeholder="UserName*"
-        containerStyle={$.containerStyle}
-        placeholderTextColor="gray"
-        value={userName}
-        errorMessage={userNameError ? 'Invalid characters' : ' '}
-        errorStyle={$.error}
-        onChangeText={(text) => setUserName(text)}
-        onBlur={() => setUserNameError(userNameValidate)}
-      />
-      <Input
-        inputStyle={$.input}
-        inputContainerStyle={$.inputContainerStyle}
-        placeholder="Email*"
-        containerStyle={$.containerStyle}
-        placeholderTextColor="gray"
-        value={email}
-        errorMessage={emailError ? 'Incorrect email' : ' '}
-        errorStyle={$.error}
-        onChangeText={(text) =>
-          dispatch(setCredentials({ firstName, lastName, email: text }))
-        }
-        onBlur={() => setEmailError(emailValidate)}
-      />
-      <Input
-        inputStyle={$.input}
-        inputContainerStyle={$.inputContainerStyle}
-        placeholder="Password*"
-        secureTextEntry
-        containerStyle={$.containerStyle}
-        placeholderTextColor="gray"
-        value={password}
-        errorMessage={passwordError ? 'Password lenght must be 8 or more' : ' '}
-        errorStyle={$.error}
-        onChangeText={(text) => setPassword(text)}
-        onBlur={() => setPasswordError(passwordValidate)}
-      />
-      <Input
-        inputStyle={$.input}
-        inputContainerStyle={$.inputContainerStyle}
-        placeholder="Confirm password*"
-        secureTextEntry
-        containerStyle={$.containerStyle}
-        placeholderTextColor="gray"
-        value={confirmPass}
-        errorMessage={confirmPassError ? 'Confirm your password' : ' '}
-        errorStyle={$.error}
-        onChangeText={(text) => setConfirmPass(text)}
-        onBlur={() => setConfirmPassError(confirmPassValidate)}
-      />
+      <ScrollView>
+        <Input
+          inputStyle={$.input}
+          inputContainerStyle={$.inputContainerStyle}
+          placeholder="First Name"
+          containerStyle={$.containerStyle}
+          placeholderTextColor="gray"
+          value={firstName}
+          errorMessage={firstNameError ? 'Incorrect characters' : ' '}
+          errorStyle={$.error}
+          onChangeText={(text) =>
+            dispatch(setCredentials({ firstName: text, lastName, email }))
+          }
+          onBlur={() => setFirstNameError(firstNameValidate)}
+        />
+        <Input
+          inputStyle={$.input}
+          inputContainerStyle={$.inputContainerStyle}
+          placeholder="Last Name"
+          containerStyle={$.containerStyle}
+          placeholderTextColor="gray"
+          value={lastName}
+          errorMessage={lastNameError ? 'Incorrect characters' : ' '}
+          errorStyle={$.error}
+          onChangeText={(text) =>
+            dispatch(setCredentials({ firstName, lastName: text, email }))
+          }
+          onBlur={() => setLastNameError(lastNameValidate)}
+        />
+        <Input
+          inputStyle={$.input}
+          inputContainerStyle={$.inputContainerStyle}
+          placeholder="UserName*"
+          containerStyle={$.containerStyle}
+          placeholderTextColor="gray"
+          value={userName}
+          errorMessage={userNameError ? 'Invalid characters' : ' '}
+          errorStyle={$.error}
+          onChangeText={(text) => setUserName(text)}
+          onBlur={() => setUserNameError(userNameValidate)}
+        />
+        <Input
+          inputStyle={$.input}
+          inputContainerStyle={$.inputContainerStyle}
+          placeholder="Email*"
+          containerStyle={$.containerStyle}
+          placeholderTextColor="gray"
+          value={email}
+          errorMessage={emailError ? 'Incorrect email' : ' '}
+          errorStyle={$.error}
+          onChangeText={(text) =>
+            dispatch(setCredentials({ firstName, lastName, email: text }))
+          }
+          onBlur={() => setEmailError(emailValidate)}
+        />
+        <Input
+          inputStyle={$.input}
+          inputContainerStyle={$.inputContainerStyle}
+          placeholder="Password*"
+          secureTextEntry
+          containerStyle={$.containerStyle}
+          placeholderTextColor="gray"
+          value={password}
+          errorMessage={
+            passwordError ? 'Password lenght must be 8 or more' : ' '
+          }
+          errorStyle={$.error}
+          onChangeText={(text) => setPassword(text)}
+          onBlur={() => setPasswordError(passwordValidate)}
+        />
+        <Input
+          inputStyle={$.input}
+          inputContainerStyle={$.inputContainerStyle}
+          placeholder="Confirm password*"
+          secureTextEntry
+          containerStyle={$.containerStyle}
+          placeholderTextColor="gray"
+          value={confirmPass}
+          errorMessage={confirmPassError ? 'Confirm your password' : ' '}
+          errorStyle={$.error}
+          onChangeText={(text) => setConfirmPass(text)}
+          onBlur={() => setConfirmPassError(confirmPassValidate)}
+        />
 
-      <FormButton
-        disabled={
-          firstNameValidate ||
-          lastNameValidate ||
-          userNameValidate ||
-          emailValidate ||
-          passwordValidate ||
-          confirmPassValidate
-        }
-        onPress={() => {
-          if (validateSignUpButton())
+        <FormButton
+          disabled={
+            firstNameValidate ||
+            lastNameValidate ||
+            userNameValidate ||
+            emailValidate ||
+            passwordValidate ||
+            confirmPassValidate
+          }
+          onPress={() => {
             dispatch(
               signUp({
                 firstName,
@@ -145,15 +148,24 @@ const RegisterScreen: FC = () => {
                 userName,
               }),
             );
-        }}>
-        Sing up
-      </FormButton>
-      <FBButton />
+          }}>
+          Sing up
+        </FormButton>
+        <FBButton />
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('Login')}>
+          <View>
+            <Text style={{ ...$.signIn, marginTop: 10 }}>
+              Already have an account?
+            </Text>
+            <Text style={{ ...$.signIn, color: '#3A86FF', marginBottom: 40 }}>
+              Sing in
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
+      </ScrollView>
     </>
   );
 };
-
-const validateSignUpButton = (val = false) => val;
 
 const $ = StyleSheet.create({
   input: {
@@ -178,6 +190,12 @@ const $ = StyleSheet.create({
     margin: 0,
     padding: 0,
     paddingLeft: 10,
+  },
+  signIn: {
+    width: '100%',
+    textAlign: 'center',
+    fontFamily: 'Manrope-Regular',
+    fontSize: 16,
   },
 });
 

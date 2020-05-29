@@ -1,7 +1,7 @@
-const auth = require('./auth.route');
-const verify = require('./verify.route');
+import verify from './verify.route';
+import auth from './auth.route';
 
-module.exports = (app) => {
+export default (app) => {
   app.use('/api/auth', auth);
   app.use('/verify', verify);
 };

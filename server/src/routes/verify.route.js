@@ -1,8 +1,8 @@
-const { Router } = require('express');
-const controllers = require('../controllers');
+import { Router } from 'express';
+import verifyController from '../controllers/auth/verify.controller';
 
 const router = Router();
 
-router.get('/:id', controllers.auth.verify);
+router.get('/:id', verifyController);
 
-module.exports = router;
+export default router;

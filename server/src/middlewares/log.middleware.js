@@ -1,6 +1,6 @@
-const { log } = require('../helpers');
+import log from '../helpers/log';
 
-const safeParse = (body) => {
+export const safeParse = (body) => {
   let result;
   try {
     result = JSON.parse(body);
@@ -11,7 +11,7 @@ const safeParse = (body) => {
   return result;
 };
 
-const logReq = (req, res, next) => {
+export const logReq = (req, res, next) => {
   const { method, url, body } = req;
   log.info({
     label: 'Request',
@@ -20,7 +20,7 @@ const logReq = (req, res, next) => {
   next();
 };
 
-const logRes = (req, res, next) => {
+export const logRes = (req, res, next) => {
   const defaultWrite = res.write;
   const defaultEnd = res.end;
   const chunks = [];
@@ -43,5 +43,3 @@ const logRes = (req, res, next) => {
 
   next();
 };
-
-module.exports = { logReq, logRes };

@@ -4,8 +4,13 @@ import { LoginButton, AccessToken, LoginManager } from 'react-native-fbsdk';
 import FormButton from './FormButton';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../actions';
+import { Toast } from 'native-base';
 
-const FBButton: FC = () => {
+type FBButtonProps = {
+  login?: boolean;
+};
+
+const FBButton: FC<FBButtonProps> = (props) => {
   const dispatch = useDispatch();
   return (
     <FormButton
@@ -36,7 +41,7 @@ const FBButton: FC = () => {
           console.log(error);
         }
       }}>
-      Sing up via FB
+      {props.login ? 'Sign in via FB' : 'Sing up via FB'}
     </FormButton>
   );
 };

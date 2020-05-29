@@ -1,5 +1,5 @@
 /* eslint-disable no-throw-literal */
-module.exports = (req, res, next) => {
+export default (req, res, next) => {
   try {
     const { userId } = req.body;
 

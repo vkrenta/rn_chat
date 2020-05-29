@@ -1,4 +1,4 @@
-import { TCredentials } from 'src/types';
+import { TCredentials } from '../types';
 import sendRequest from './send-request';
 
 const register = async (credentials: TCredentials) =>

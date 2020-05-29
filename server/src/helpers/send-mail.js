@@ -1,6 +1,6 @@
-const { createTransport } = require('nodemailer');
+import { createTransport } from 'nodemailer';
 
-module.exports = ({ to, subject, text, html, cc, bcc }) => {
+export default ({ to, subject, text, html, cc, bcc }) => {
   const transporter = createTransport({
     service: process.env.MAIL_SERVICE,
     auth: {

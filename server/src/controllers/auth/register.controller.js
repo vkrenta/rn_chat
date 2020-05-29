@@ -1,15 +1,19 @@
-const bcrypt = require('bcrypt');
-const fs = require('fs').promises;
+import { hash } from 'bcrypt';
+import { promises as fs } from 'fs';
+import { checkUser } from '../../db/methods/auth.methods';
+import { sign } from '../../helpers/verify';
+import log from '../../helpers/log';
+import sendMail from '../../helpers/send-mail';
 
-const { resType, sendMail, sign, log } = require('../../helpers');
+// const { resType, sendMail, sign, log } = require('../../helpers').default;
 
-const {
-  auth: { checkUser },
-} = require('../../db/methods');
+// const {
+//   auth: { checkUser },
+// } = require('../../db/methods');
 
 const expireTime = '15m';
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
   try {
     const { userName, password, email, firstName, lastName } = req.body;
 
@@ -22,13 +26,10 @@ module.exports = async (req, res, next) => {
     if (await checkUser({ userName, email }))
       return res
         .status(200)
-        .send({ type: resType.info, payload: 'User already exists' });
+        .send({ type: 'info', payload: 'User already exists' });
 
     // 2) bcrypt password
-    const cPassword = await bcrypt.hash(
-      password,
-      Number(process.env.SALT_ROUNDS)
-    );
+    const cPassword = await hash(password, Number(process.env.SALT_ROUNDS));
 
     // 3) get link
     const token = sign(
@@ -58,7 +59,7 @@ module.exports = async (req, res, next) => {
       html: htmlTemplate,
     });
     res.status(200).send({
-      type: resType.info,
+      type: 'info',
       payload: `Verification letter sended to ${email}`,
     });
   } catch (e) {

@@ -11,7 +11,29 @@ const sendRequest = async (
   });
 
   const result = await response.json();
-  if (result.type !== 'data') throw new Error(JSON.stringify(result));
+  const error = new Error();
+  if (response.status === 500) {
+    error.message = JSON.stringify({
+      code: 500,
+      message: result.message,
+    });
+    throw error;
+  }
+  if (response.status === 404) {
+    error.message = JSON.stringify({
+      code: 404,
+      message: result.message,
+    });
+    throw error;
+  }
+  if (!response.ok) {
+    error.message = JSON.stringify({
+      code: result.code || 400,
+      message: result.message,
+    });
+    throw error;
+  }
+
   return result;
 };
 

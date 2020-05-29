@@ -1,14 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-throw-literal */
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { getUser } = require('../../db/methods/auth.methods');
+import { compare } from 'bcrypt';
+import { sign } from 'jsonwebtoken';
+import { getUser } from '../../db/methods/auth.methods';
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
   try {
     // Serialize user credentials
     const { userName, email, password } = req.body;
-
+    const fbLogin = req.url === '/api/auth/fblogin';
     // If all of credentials are missing
     if (!userName && !email)
       throw {
@@ -27,17 +27,17 @@ module.exports = async (req, res, next) => {
       };
 
     // If the user provided a wrong password
-    if (!(await bcrypt.compare(password, user.password)))
+    if (!fbLogin && !(await compare(password, user.password)))
       throw {
         status: 401,
         type: 'warn',
         payload: 'Wrong password',
       };
 
-    const jwToken = jwt.sign({ userId: user._id }, process.env.AUTH_SECRET);
+    const jwToken = sign({ userId: user._id }, process.env.AUTH_SECRET);
     res.status(200).send({
       type: 'data',
-      payload: { token: jwToken },
+      token: jwToken,
     });
   } catch (e) {
     next(e);

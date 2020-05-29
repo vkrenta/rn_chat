@@ -1,15 +1,17 @@
-const { Router } = require('express');
-const controllers = require('../controllers');
-const mw = require('../middlewares');
+import { Router } from 'express';
+import authController from '../controllers/auth/auth.controller';
+import authMiddleware from '../middlewares/auth.middleware';
+import registerController from '../controllers/auth/register.controller';
+import loginController from '../controllers/auth/login.controller';
 
 const router = Router();
 
 /* GET */
-router.get('/login', mw.auth, controllers.auth.auth);
+router.get('/login', authMiddleware, authController);
 
 /* POST */
-router.post('/register', controllers.auth.register);
-router.post('/login', controllers.auth.login);
+router.post('/register', registerController);
+router.post('/login', loginController);
+router.post('/fblogin', loginController);
 
-
-module.exports = router;
+export default router;

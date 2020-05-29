@@ -1,5 +1,5 @@
 /* eslint-disable no-fallthrough */
-const Cryptr = require('cryptr');
+import Cryptr from 'cryptr';
 
 /** Parses date day, hours, minutes, seconds from string
  * and returns ready to use expiration Date object
@@ -9,7 +9,7 @@ const Cryptr = require('cryptr');
  * @returns { Date } date    - Date object
  */
 
-function getExpDate(issues, dateStr) {
+export function getExpDate(issues, dateStr) {
   const x = dateStr[dateStr.length - 1];
   const time = Number(dateStr.substr(0, dateStr.length - 1));
 
@@ -41,7 +41,7 @@ function getExpDate(issues, dateStr) {
  * @param   { String } expires - Expiration time
  * @returns { String } hash    - hashed JSON object
  */
-const sign = (object, secret, expires) => {
+export const sign = (object, secret, expires) => {
   const cryptr = new Cryptr(secret);
   const Obj = object;
   Obj.expDate = getExpDate(Date.now(), expires);
@@ -54,7 +54,7 @@ const sign = (object, secret, expires) => {
  * @param   { String } token  - Hashed token
  * @returns { Object } parsed - Decrypted and JSON.parsed object
  */
-const verify = (token, secret) => {
+export const verify = (token, secret) => {
   const cryptr = new Cryptr(secret);
   const decrypted = JSON.parse(cryptr.decrypt(token));
 
@@ -68,10 +68,4 @@ const verify = (token, secret) => {
   err.message = 'Link expired';
 
   throw err;
-};
-
-module.exports = {
-  sign,
-  verify,
-  getExpDate,
 };

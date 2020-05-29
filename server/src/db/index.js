@@ -1,9 +1,9 @@
-const { connect } = require('mongoose');
-const { log } = require('../helpers');
+import mongoose from 'mongoose';
+import log from '../helpers/log';
 
-module.exports = async () => {
+export default async () => {
   try {
-    await connect(process.env.MONGO_URI, {
+    await mongoose.connect(process.env.MONGO_URI, {
       useUnifiedTopology: true,
       useNewUrlParser: true,
     });

@@ -1,7 +1,7 @@
-const { User } = require('../models');
-const { log } = require('../../helpers');
+import { User } from '../models';
+import log from '../../helpers/log';
 
-const createUser = async ({
+export const createUser = async ({
   userName,
   password,
   email,
@@ -18,21 +18,13 @@ const createUser = async ({
   log.info({ label: 'Created user', message: user });
 };
 
-const getUser = async ({ userName, email }) =>
-{
+export const getUser = async ({ userName, email }) => {
   let user;
 
   if (userName) user = await User.findOne({ userName }).exec();
   if (!user) user = await User.findOne({ email }).exec();
   return user;
 };
-const checkUser = async ({ userName, email }) =>
-{
-  return !!await getUser({ userName, email });
-};
-
-module.exports = {
-  createUser,
-  getUser,
-  checkUser,
+export const checkUser = async ({ userName, email }) => {
+  return !!(await getUser({ userName, email }));
 };

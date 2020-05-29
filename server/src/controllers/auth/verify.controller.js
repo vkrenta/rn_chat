@@ -1,10 +1,8 @@
-const fs = require('fs').promises;
-const {
-  auth: { createUser, checkUser },
-} = require('../../db/methods');
-const { verify } = require('../../helpers');
+import { promises as fs } from 'fs';
+import { verify } from '../../helpers/verify';
+import { checkUser, createUser } from '../../db/methods/auth.methods';
 
-module.exports = async (req, res, next) => {
+export default async (req, res, next) => {
   const htmlTemplate = (
     await fs.readFile('src/views/regresult.html')
   ).toString();
