@@ -4,9 +4,11 @@ import { SIGN_UP } from '../actions/action-types';
 import register from '../api/register.api';
 import errorHandler from './errorHandler';
 import showToast from '../components/ShowToast';
+import { setLoader } from '../actions';
 
 function* worker(action: TAction<TCredentials>) {
   try {
+    yield put(setLoader(true));
     yield call(register, action.payload!);
     showToast({
       type: 'success',
@@ -14,6 +16,8 @@ function* worker(action: TAction<TCredentials>) {
     });
   } catch (e) {
     yield errorHandler(e);
+  } finally {
+    yield put(setLoader(false));
   }
 }
 

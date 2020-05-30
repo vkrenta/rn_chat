@@ -3,7 +3,7 @@ import { View, EventEmitter } from 'react-native';
 import { LoginButton, AccessToken, LoginManager } from 'react-native-fbsdk';
 import FormButton from './FormButton';
 import { useDispatch } from 'react-redux';
-import { setCredentials } from '../actions';
+import { setCredentials, setLoader } from '../actions';
 import { Toast } from 'native-base';
 
 type FBButtonProps = {
@@ -25,6 +25,8 @@ const FBButton: FC<FBButtonProps> = (props) => {
           const { accessToken } = Object(
             await AccessToken.getCurrentAccessToken(),
           );
+
+          dispatch(setLoader(true));
           const response = await fetch(
             'https://graph.facebook.com/v5.0/me?fields=email,name&access_token=' +
               accessToken,
@@ -35,7 +37,7 @@ const FBButton: FC<FBButtonProps> = (props) => {
           }: { email: string; name: string } = await response.json();
 
           const [firstName, lastName] = name.split(' ');
-
+          dispatch(setLoader(false));
           dispatch(setCredentials({ email, firstName, lastName }));
         } catch (error) {
           console.log(error);

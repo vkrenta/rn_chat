@@ -1,10 +1,10 @@
 import { combineReducers, AnyAction } from 'redux';
-import toast from './toast.reducer';
 import rgCredentialsReducer from './rgcredentials.reducer';
+import loaderReducer from './loader.reducer';
 
 const rootReducer = combineReducers({
-  toast,
   rgCredentials: rgCredentialsReducer,
+  loader: loaderReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

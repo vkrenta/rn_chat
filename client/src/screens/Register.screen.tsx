@@ -152,7 +152,7 @@ const RegisterScreen: FC = () => {
           Sing up
         </FormButton>
         <FBButton />
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('Login')}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('Loader')}>
           <View>
             <Text style={{ ...$.signIn, marginTop: 10 }}>
               Already have an account?

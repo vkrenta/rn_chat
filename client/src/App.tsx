@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBar, StyleSheet } from 'react-native';
+import { StatusBar, StyleSheet, Text, View } from 'react-native';
 import RegisterScreen from './screens/Register.screen';
 import LoginScreen from './screens/Login.screen';
 import { Provider } from 'react-redux';
@@ -10,9 +10,10 @@ import createMiddleware from 'redux-saga';
 import watchers from './saga';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Root } from 'native-base';
+import { Root, Spinner } from 'native-base';
+import Loader from './components/Loader';
 
-const Stack = createStackNavigator();
+const MainStack = createStackNavigator();
 
 const App: React.FC = () => {
   const sagaMiddleware = createMiddleware();
@@ -27,29 +28,33 @@ const App: React.FC = () => {
       <Provider store={store}>
         <NavigationContainer>
           <StatusBar translucent backgroundColor="transparent" />
-          <Root>
-            <Stack.Navigator>
-              <Stack.Screen
-                name="Register"
-                component={RegisterScreen}
-                options={{
-                  title: 'Sign Up',
-                  headerStyle: $.header,
-                  headerTitleStyle: $.headerTitle,
-                }}
-              />
-              <Stack.Screen
-                name="Login"
-                component={LoginScreen}
-                options={{
-                  title: 'Sign In',
-                  headerStyle: $.header,
-                  headerTitleStyle: $.headerTitle,
-                  headerTintColor: 'white',
-                }}
-              />
-            </Stack.Navigator>
-          </Root>
+          <View style={$.loaderOverlay}>
+            <Loader />
+
+            <Root>
+              <MainStack.Navigator>
+                <MainStack.Screen
+                  name="Register"
+                  component={RegisterScreen}
+                  options={{
+                    title: 'Sign Up',
+                    headerStyle: $.header,
+                    headerTitleStyle: $.headerTitle,
+                  }}
+                />
+                <MainStack.Screen
+                  name="Login"
+                  component={LoginScreen}
+                  options={{
+                    title: 'Sign In',
+                    headerStyle: $.header,
+                    headerTitleStyle: $.headerTitle,
+                    headerTintColor: 'white',
+                  }}
+                />
+              </MainStack.Navigator>
+            </Root>
+          </View>
         </NavigationContainer>
       </Provider>
     </>
@@ -67,6 +72,12 @@ const $ = StyleSheet.create({
   },
   header: {
     backgroundColor: '#fb5607',
+  },
+  loaderOverlay: {
+    width: '100%',
+    height: '100%',
+    position: 'relative',
+    zIndex: 0,
   },
 });
 
