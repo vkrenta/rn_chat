@@ -13,9 +13,12 @@ import { useNavigation } from '@react-navigation/native';
 import FormButton from '../components/FormButton';
 import FBButton from '../components/FBButton';
 import validator from 'validator';
+import { useDispatch } from 'react-redux';
+import { signIn } from '../actions';
 
 const LoginScreen: FC = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
@@ -60,7 +63,9 @@ const LoginScreen: FC = () => {
               passwordError ? 'Password must contain 8 characters or more' : ' '
             }
           />
-          <FormButton disabled={validateLogin || validatePassword}>
+          <FormButton
+            disabled={validateLogin || validatePassword}
+            onPress={() => dispatch(signIn({ login, password }))}>
             Sign In
           </FormButton>
           <FBButton login />
