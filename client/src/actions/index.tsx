@@ -19,9 +19,10 @@ export const setLoader = (payload: boolean): TAction<boolean> => ({
 });
 
 export const signIn = (payload: {
-  login: string;
-  password: string;
-}): TAction<{ login: string; password: string }> => ({
+  userName?: string;
+  email?: string;
+  password?: string;
+}): TAction<{ userName?: string; email?: string; password?: string }> => ({
   type: SIGN_IN,
   payload,
 });

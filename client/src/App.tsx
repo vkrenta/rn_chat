@@ -2,10 +2,10 @@ import React from 'react';
 import { StatusBar, StyleSheet, Text, View } from 'react-native';
 import RegisterScreen from './screens/Register.screen';
 import LoginScreen from './screens/Login.screen';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import rootReducer from './reducers';
+import rootReducer, { RootState } from './reducers';
 import createMiddleware from 'redux-saga';
 import watchers from './saga';
 import { NavigationContainer } from '@react-navigation/native';
@@ -14,6 +14,48 @@ import { Root, Spinner } from 'native-base';
 import Loader from './components/Loader';
 
 const MainStack = createStackNavigator();
+
+const MainApp = () => {
+  const token = useSelector((state: RootState) => state.token);
+  return (
+    <NavigationContainer>
+      <StatusBar translucent backgroundColor="transparent" />
+      <View style={$.loaderOverlay}>
+        <Loader />
+
+        <Root>
+          {!!token ? (
+            <View>
+              <Text>Hi</Text>
+            </View>
+          ) : (
+            <MainStack.Navigator>
+              <MainStack.Screen
+                name="Register"
+                component={RegisterScreen}
+                options={{
+                  title: 'Sign Up',
+                  headerStyle: $.header,
+                  headerTitleStyle: $.headerTitle,
+                }}
+              />
+              <MainStack.Screen
+                name="Login"
+                component={LoginScreen}
+                options={{
+                  title: 'Sign In',
+                  headerStyle: $.header,
+                  headerTitleStyle: $.headerTitle,
+                  headerTintColor: 'white',
+                }}
+              />
+            </MainStack.Navigator>
+          )}
+        </Root>
+      </View>
+    </NavigationContainer>
+  );
+};
 
 const App: React.FC = () => {
   const sagaMiddleware = createMiddleware();
@@ -26,36 +68,7 @@ const App: React.FC = () => {
   return (
     <>
       <Provider store={store}>
-        <NavigationContainer>
-          <StatusBar translucent backgroundColor="transparent" />
-          <View style={$.loaderOverlay}>
-            <Loader />
-
-            <Root>
-              <MainStack.Navigator>
-                <MainStack.Screen
-                  name="Register"
-                  component={RegisterScreen}
-                  options={{
-                    title: 'Sign Up',
-                    headerStyle: $.header,
-                    headerTitleStyle: $.headerTitle,
-                  }}
-                />
-                <MainStack.Screen
-                  name="Login"
-                  component={LoginScreen}
-                  options={{
-                    title: 'Sign In',
-                    headerStyle: $.header,
-                    headerTitleStyle: $.headerTitle,
-                    headerTintColor: 'white',
-                  }}
-                />
-              </MainStack.Navigator>
-            </Root>
-          </View>
-        </NavigationContainer>
+        <MainApp />
       </Provider>
     </>
   );

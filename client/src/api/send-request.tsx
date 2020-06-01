@@ -4,7 +4,7 @@ const sendRequest = async (
   headers: any,
   body: string | null = null,
 ) => {
-  const response = await fetch(`http://localhost:8000/${path}`, {
+  const response = await fetch(`http://localhost:8000${path}`, {
     method,
     headers,
     body,
@@ -15,21 +15,21 @@ const sendRequest = async (
   if (response.status === 500) {
     error.message = JSON.stringify({
       code: 500,
-      message: result.message,
+      message: result.payload,
     });
     throw error;
   }
   if (response.status === 404) {
     error.message = JSON.stringify({
       code: 404,
-      message: result.message,
+      message: result.payload,
     });
     throw error;
   }
   if (!response.ok) {
     error.message = JSON.stringify({
       code: result.code || 400,
-      message: result.message,
+      message: result.payload,
     });
     throw error;
   }

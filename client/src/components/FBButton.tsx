@@ -3,7 +3,7 @@ import { View, EventEmitter } from 'react-native';
 import { LoginButton, AccessToken, LoginManager } from 'react-native-fbsdk';
 import FormButton from './FormButton';
 import { useDispatch } from 'react-redux';
-import { setCredentials, setLoader } from '../actions';
+import { setCredentials, setLoader, signIn } from '../actions';
 import { Toast } from 'native-base';
 
 type FBButtonProps = {
@@ -38,7 +38,9 @@ const FBButton: FC<FBButtonProps> = (props) => {
 
           const [firstName, lastName] = name.split(' ');
           dispatch(setLoader(false));
-          dispatch(setCredentials({ email, firstName, lastName }));
+          props.login
+            ? dispatch(signIn({ email }))
+            : dispatch(setCredentials({ email, firstName, lastName }));
         } catch (error) {
           console.log(error);
         }

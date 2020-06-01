@@ -25,7 +25,7 @@ export default async (req, res, next) => {
     // 1) check if user already exists
     if (await checkUser({ userName, email }))
       return res
-        .status(200)
+        .status(401)
         .send({ type: 'info', payload: 'User already exists' });
 
     // 2) bcrypt password

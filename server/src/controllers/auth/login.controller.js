@@ -8,7 +8,7 @@ export default async (req, res, next) => {
   try {
     // Serialize user credentials
     const { userName, email, password } = req.body;
-    const fbLogin = req.url === '/api/auth/fblogin';
+    const fbLogin = req.url === '/fblogin';
     // If all of credentials are missing
     if (!userName && !email)
       throw {
