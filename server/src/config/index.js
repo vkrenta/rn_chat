@@ -1,16 +1,9 @@
-require('dotenv').config();
+require('dotenv').config({ path: 'src/config/.env' });
 
-let dbName, mongoUri;
 
-if (process.env.NODE_ENV == 'DEV')
-    dbName = process.env.DB_NAME_DEV;
-else
-    dbName = process.env.DB_NAME_PROD;
-
-mongoUri = process.env.MONGO_URI.replace("{{DB_NAME}}", dbName);
-
-module.exports = 
-{
-    PORT: process.env.PORT,
-    MONGO_URI: mongoUri
-};
+const dbName = process.env[`DB_NAME_${process.env.NODE_ENV}`];
+process.env.LINK_ROUTE = process.env.LINK_ROUTE.replace(
+  '{{PORT}}',
+  process.env.PORT
+);
+process.env.MONGO_URI = process.env.MONGO_URI.replace('{{DB_NAME}}', dbName);
