@@ -7,7 +7,7 @@ import loginController from '../controllers/auth/login.controller';
 const router = Router();
 
 /* GET */
-router.get('/login', authMiddleware, authController);
+router.get('/user', authMiddleware, authController);
 
 /* POST */
 router.post('/register', registerController);

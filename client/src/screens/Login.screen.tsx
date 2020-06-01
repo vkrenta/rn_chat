@@ -65,7 +65,11 @@ const LoginScreen: FC = () => {
           />
           <FormButton
             disabled={validateLogin || validatePassword}
-            onPress={() => dispatch(signIn({ login, password }))}>
+            onPress={() => {
+              if (validator.isEmail(login)) return;
+              dispatch(signIn({ email: login, password }));
+              dispatch(signIn({ userName: login, password }));
+            }}>
             Sign In
           </FormButton>
           <FBButton login />

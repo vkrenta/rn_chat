@@ -1,8 +1,8 @@
-import React from 'react';
-import { StatusBar, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { StatusBar, StyleSheet, Text, View, AsyncStorage } from 'react-native';
 import RegisterScreen from './screens/Register.screen';
 import LoginScreen from './screens/Login.screen';
-import { Provider, useSelector } from 'react-redux';
+import { Provider, useSelector, useDispatch } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer, { RootState } from './reducers';
@@ -10,13 +10,24 @@ import createMiddleware from 'redux-saga';
 import watchers from './saga';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Root, Spinner } from 'native-base';
 import Loader from './components/Loader';
+import ChatScreen from './screens/Chat.screen';
+import { SET_TOKEN } from './actions/action-types';
 
-const MainStack = createStackNavigator();
+const Stack = createStackNavigator();
 
 const MainApp = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    (async () => {
+      const storedToken = await AsyncStorage.getItem('token');
+      if (storedToken) dispatch({ type: SET_TOKEN, payload: storedToken });
+    })();
+  }, []);
   const token = useSelector((state: RootState) => state.token);
+  if (token) AsyncStorage.setItem('token', token);
   return (
     <NavigationContainer>
       <StatusBar translucent backgroundColor="transparent" />
@@ -25,12 +36,20 @@ const MainApp = () => {
 
         <Root>
           {!!token ? (
-            <View>
-              <Text>Hi</Text>
-            </View>
+            <Stack.Navigator>
+              <Stack.Screen
+                name="Chat"
+                component={ChatScreen}
+                options={{
+                  title: 'RNChat',
+                  headerStyle: $.header,
+                  headerTitleStyle: $.headerTitle,
+                }}
+              />
+            </Stack.Navigator>
           ) : (
-            <MainStack.Navigator>
-              <MainStack.Screen
+            <Stack.Navigator>
+              <Stack.Screen
                 name="Register"
                 component={RegisterScreen}
                 options={{
@@ -39,7 +58,7 @@ const MainApp = () => {
                   headerTitleStyle: $.headerTitle,
                 }}
               />
-              <MainStack.Screen
+              <Stack.Screen
                 name="Login"
                 component={LoginScreen}
                 options={{
@@ -49,7 +68,7 @@ const MainApp = () => {
                   headerTintColor: 'white',
                 }}
               />
-            </MainStack.Navigator>
+            </Stack.Navigator>
           )}
         </Root>
       </View>

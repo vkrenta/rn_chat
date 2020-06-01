@@ -9,5 +9,6 @@ export default function* errorHandler(e: Error) {
   } catch (E) {
     result = e.message || E.message;
   }
+  if (!result.message) result.message = 'Network Error';
   showToast({ text: result.message, type: 'danger' });
 }

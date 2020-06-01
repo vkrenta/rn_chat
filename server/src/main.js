@@ -1,8 +1,10 @@
+/* eslint-disable no-shadow */
 import express, { json, urlencoded } from 'express';
+import socket from 'socket.io';
+import http from 'http';
 import useRouter from './routes';
 import './config';
 import connectToMongo from './db';
-// import { logReq, logRes, errorMiddleware } from './middlewares';
 import log from './helpers/log';
 import { logReq, logRes } from './middlewares/log.middleware';
 import errorMiddleware from './middlewares/error.middleware';
@@ -15,6 +17,15 @@ process.on('unhandledRejection', (e) =>
 );
 
 const app = express();
+const server = http.createServer(app);
+const io = socket(server);
+
+io.on('connection', (socket) => {
+  socket.on('message', (message) => {
+    log.info(message);
+    io.emit('message', message);
+  });
+});
 
 app.use(json({ extended: true }));
 app.use(urlencoded({ extended: true }));
@@ -28,7 +39,7 @@ app.use(errorMiddleware);
 // Final stage
 const start = async () => {
   await connectToMongo();
-  app.listen(
+  server.listen(
     process.env.PORT,
     log.info({ label: 'Listening port', message: `${process.env.PORT}` })
   );

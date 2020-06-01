@@ -1,5 +1,12 @@
 import { TCredentials, TAction, RGCredentials } from '../types';
-import { SIGN_UP, SET_CREDENTIALS, SET_LOADER, SIGN_IN } from './action-types';
+import {
+  SIGN_UP,
+  SET_CREDENTIALS,
+  SET_LOADER,
+  SIGN_IN,
+  Message,
+  ADD_MESSAGE,
+} from './action-types';
 
 export const signUp = (credentials: TCredentials): TAction<TCredentials> => ({
   type: SIGN_UP,
@@ -24,5 +31,15 @@ export const signIn = (payload: {
   password?: string;
 }): TAction<{ userName?: string; email?: string; password?: string }> => ({
   type: SIGN_IN,
+  payload,
+});
+
+export const addMessage = (payload: Message) => ({
+  type: ADD_MESSAGE,
+  payload,
+});
+
+export const sendMessage = (payload: Message) => ({
+  type: ADD_MESSAGE,
   payload,
 });
